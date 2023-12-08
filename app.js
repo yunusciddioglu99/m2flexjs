@@ -1,20 +1,70 @@
 let canvas = document.getElementById("canvas");
 let g = canvas.getContext("2d");
+let uiWindow = createRect(700,200,300,300);
 
 
-
-const gamestat_start=0;
+const gamestate_start=0;
 const gamestate_ingame=1;
-const gametstate_gameover=2;
+const gamestate_gameover=2;
 
 const ingamestate_start=0;
 const ingamestate_roll=1;
 const ingamestate_end=0;
 
+let gameState = gamestate_start;
+let ingameState = ingamestate_start;
 let boardPositionSize= 65;      //// verander dit om de grootte van de board te veranderen
 let pawnPositions = [];
 let boardPositions=[];
 let playerAmountButtons = [];
+
+
+
+
+function drawGameStart()
+{
+    for(let i =0 ; i<playerAmountButtons.length;i++)
+    {
+        let pos = playerAmountButtons[i];
+
+        g.fillStyle = "#004400"
+        g.fillRect(pos.x,pos.y,pos.w,pos.h);
+        g.fillStyle = "#FFFFFF"
+        g.fillText((i+1)+"",pos.x,pos.y+20)
+    }
+
+
+}
+
+
+
+
+
+
+
+function drawIngame()
+{
+    for(let i =0 ; i<boardPositions.length;i++)
+    {
+        let pos = boardPositions[i];
+
+        g.fillStyle = "#004400"
+        g.fillRect(pos.x,pos.y,pos.w,pos.h);
+        g.fillStyle = "#FFFFFF"
+        g.fillText((i+1)+"",pos.x,pos.y+20);
+    }
+}
+
+
+
+
+
+
+function drawGameOver(){
+
+}
+
+
 
 
 
@@ -42,17 +92,14 @@ function clearCanvas()
 
 function draw()
 {
-    clearCanvas();
-    for(let i =0 ; i<boardPositions.length;i++)
+    clearCanvas(); 
+    if (gameState==gamestate_start)
     {
-        let pos = boardPositions[i];
-
-        g.fillStyle  = "#004400";
-        //we gebruiken hier de x en y van het rectangle object
-        // vul bij de ??? ook de h & w in, net als bij de x en y gedaan is!
-        g.fillRect(pos.x,pos.y,pos.h,pos.w);
-        g.fillStyle  = "#FFFFFF";
-        g.fillText((i+1)+"",pos.x,pos.y+20);
+        drawGameStart();
+    }
+    else if (gameState==gamestate_ingame)
+    {
+        drawIngame();
     }
 }
 
@@ -86,8 +133,20 @@ function createBoardPositions()
   }
 } 
 
-createBoardPositions();
-draw();
+function initGame()
+{
+    createBoardPositions();
+    draw();
 
+    for(let i =0 ; i<4;i++)
+    {
+        let button = createRect(uiWindow.x+5 +i*50,uiWindow.y+50,50,50);
+        button.playerAmount=i+1;
+        playerAmountButtons.push(button)
+        
+    }
 
+}
 
+initGame()
+draw()

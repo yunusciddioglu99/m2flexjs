@@ -21,8 +21,62 @@ let playerAmountButtons = [];
 
 
 
+
+let images ={};
+
+function imagesLoaded()
+{
+    initGame();
+    draw();
+}
+
+
+function loadImages()
+{
+    let sources = [
+        "img/dice1.png", "img/dice2.png", "img/dice3.png", "img/dice4.png", "img/dice5.png", "img/dice6.png",
+        "img/pawn0.png", "img/pawn1.png", "img/pawn2.png", "img/pawn3.png", 
+        "img/snakes.png", 
+        "img/trophy.png", 
+        "img/window.png", 
+    ];
+    
+    let scope = this;
+
+    let loaded = 0;
+    for (let i = 0; i < sources.length; i++)
+    {
+        let img = new Image();
+
+
+        img.onload = function ()
+        {
+            loaded++;
+            if (loaded == sources.length)
+            {
+                imagesLoaded();
+            }
+        };
+        img.src = sources[i];
+
+        images[ sources[i].replace("img/","")] = img;
+    }
+}
+
+
+
+
+
+
+
+
+
+
 function drawGameStart()
 {
+    
+
+
     for(let i =0 ; i<playerAmountButtons.length;i++)
     {
         let pos = playerAmountButtons[i];
@@ -31,8 +85,8 @@ function drawGameStart()
         g.fillRect(pos.x,pos.y,pos.w,pos.h);
         g.fillStyle = "#FFFFFF"
         g.fillText((i+1)+"",pos.x,pos.y+20)
+        g.drawImage(images["pawn"+i+".png"],pos.x,pos.y,pos.w,pos.h)
     }
-
 
 }
 
@@ -148,5 +202,16 @@ function initGame()
 
 }
 
-initGame()
-draw()
+
+
+
+
+
+loadImages()
+
+
+
+
+
+
+

@@ -35,21 +35,19 @@ function imagesLoaded()
 
 
 
-function canvasClicked()
+function canvasClicked(mouseEvent)
 {
-
-    let mouseEvent
 
     let mX= mouseEvent.clientX;
     let mY= mouseEvent.clientY;
 
-    let hitbutton = inRect(mX,mY,button);
 
     if (gameState==gamestate_start)
     {
         for(let i =0 ; i<playerAmountButtons.length;i++)
         {
             let button = playerAmountButtons[i];
+            let hitbutton = inRect(mX,mY,button);
             if (hitbutton==true)
             {
                 startGame(button.playerAmount);
@@ -61,10 +59,32 @@ function canvasClicked()
 }
 
 
-function startGame()
+function startGame(playerAmount)
 {
-    let playerAmount
+    gameState = gamestate_ingame;
+    ingameState = ingamestate_start;
+    pawnPositions=[];  //maakt een nieuwe pionnen lijst
+    playerTurn = 0;
+    winner=-1;
+    console.log("playerAmount "+ playerAmount);
+    for(let i = 0; i < playerAmount; i++)
+    {
+        let pawn = createPawn(i);
+        pawnPositions.push(pawn);
+    }
+   
+    draw();
 }
+
+
+function createPawn(playerI)
+{
+    return  { boardI:0,playerI:playerI};
+}
+
+
+
+
 
 
 
@@ -158,6 +178,44 @@ function drawIngame()
         g.fillStyle = "#FFFFFF"
         g.fillText((i+1)+"",pos.x,pos.y+20);
     }
+
+    for(let i =0 ; i<pawnPositions.length;i++)
+    {
+        let pos = pawnPositions[i]
+        let boardI = pos.boardI;
+
+        let boardpos = boardPositions[boardI];
+        let pawnSize = boardPositionSize/2;
+        
+        if(i==0)
+        {
+        g.drawImage(images["pawn"+i+".png"],boardpos.x,boardpos.y,pawnSize,pawnSize)
+        }
+
+        if(i==1)
+        {
+        g.drawImage(images["pawn"+i+".png"],boardpos.x+pawnSize,boardpos.y,pawnSize,pawnSize)   
+        }
+
+        if(i==2)
+        {
+        g.drawImage(images["pawn"+i+".png"],boardpos.x,boardpos.y+pawnSize,pawnSize,pawnSize)
+        }
+
+        if(i==3)
+        {
+            g.drawImage(images["pawn"+i+".png"],boardpos.x+pawnSize,boardpos.y+pawnSize,pawnSize,pawnSize)   
+        }
+
+    }
+
+
+
+g.drawImage(images["snakes.png"],0,0.55,600,600);
+
+
+
+    
 }
 
 
